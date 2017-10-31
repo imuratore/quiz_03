@@ -13,14 +13,23 @@ library(ggplot2)
 f <- curl("https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/master/AN597_Fall17/zombies.csv")
 d <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = FALSE)
 
+#selecting just medicine majors
 n <- mutate(d) %>% filter(major=="medicine/nursing")
 
-plot(data = n, age ~ years_of_education)
+#linear regression
+m <- lm(data = n, age ~ years_of_education)
+m
 
+#y=0.01865*x + 19.79866
 
-g <- ggplot(data = n, aes(x = years_of_education, y = age, color = factor(gender)))
-g <- g + geom_point()
+summary(m)
+
+#that's not a strong p value! It looks like the relationship is very weak/nonexistent.
+
+#scatterplot, then adding regression, then adding points w/ color
+g <- ggplot(data = n, aes(x = years_of_education, y = age))
 g <- g + geom_smooth(method = "lm", formula = y ~ x)
+g <- g + geom_point(aes(x = years_of_education, y = age, color = factor(gender)))
 g
 
 ```
